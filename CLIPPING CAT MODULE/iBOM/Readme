@@ -1,0 +1,7 @@
+Download the folder and start ibom.html. The iBOM will be shown in your standard browser. 
+
+I suggest using the iBOM only to find components more easily on the board.
+
+THE IBOM WILL SHOW WRONG VALUES IN SOME CASES!
+
+FOR SOURCING AND PART ORDERING PLEASE USE THE EXCEL BOM ONLY!
