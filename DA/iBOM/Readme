@@ -1,3 +1,0 @@
-Download the folder and start ibom.html. The iBOM will be shown in your standard browser. 
-I suggest to use the iBOM only to find the place of parts on the PCB. 
-For sourcing and part ordering please use the BOM excel sheet!
