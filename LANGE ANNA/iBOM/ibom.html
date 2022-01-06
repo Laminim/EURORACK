@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive BOM for Autodesk Eagle</title>
+    <link href="index.css" rel="stylesheet">
+
+    <!-- This is a really hacky way to import the json data from
+    an external file. Need to find a way to do this at the javascript level and
+    not the html level -->
+    <script type="text/javascript" src="pcbdata.json"></script>
+</head>
+
+<body>
+<div id="topmostdiv" style="width: 100%; height: 100%">
+    <div id="top">
+        <div style="float: right;">
+            <div class="hideonprint menu" style="float: right; margin: 10px; top: 8px;">
+                <button class="menubtn"></button>
+                <div class="menu-content">
+                    <label class="menu-label menu-label-top">
+                        <input id="darkmodeCheckbox" type="checkbox">
+                        Dark mode
+                    </label>
+                    <label class="menu-label">
+                        <input id="silkscreenCheckbox" type="checkbox">
+                        Show silkscreen
+                    </label>
+                    <label class="menu-label">
+                        <input id="highlightpin1Checkbox" type="checkbox">
+                        Highlight first pin
+                    </label>
+                    <label class="menu-label">
+                        <input id="dragCheckbox" type="checkbox">
+                        Continuous redraw on drag
+                    </label>
+                    <label class="menu-label">
+                        <input id="combineValues" type="checkbox">
+                        Combine values
+                    </label>
+                     <label class="menu-label">
+                        <input id="hidePlacedParts" type="checkbox">
+                        Hide placed parts
+                    </label>
+                    <label class="menu-label">
+                        <input id="debugMode" type="checkbox">
+                        Debug Mode
+                    </label>
+                    <label class="menu-label">
+                        <span>Board rotation</span>
+                        <span style="float: right"><span id="rotationDegree">0</span>&#176;</span>
+                        <input id="boardRotation" type="range" min="-36" max="36" value="0" class="slider">
+                    </label>
+                    <label class="menu-label">
+                        <div style="margin-left: 5px">BOM Checkboxes</div>
+                        <input id="bomCheckboxes" class="menu-textbox" type=text>
+                        <div style="margin-left: 5px">Remove BOM Entries</div>
+                        <input id="removeBOMEntries" class="menu-textbox" type=text>
+                        <div style="margin-left: 5px">Additional Attributes</div>
+                        <input id="additionalAttributes" class="menu-textbox" type=text>
+                    </label>
+                </div>
+            </div>
+            <div class="button-container hideonprint" style="float: right; margin: 10px; position: relative; top: 8px">
+                <button id="fl-btn" class="left-most-button"title="Front only">F</button>
+                <button id="fb-btn" class="middle-button" title="Front and Back">FB</button>
+                <button id="bl-btn" class="right-most-button" title="Back only">B</button>
+            </div>
+            <div class="button-container hideonprint"style="float: right; margin: 10px; position: relative; top: 8px">
+                <button id="bom-btn" class="left-most-button" title="BOM only"></button>
+                <button id="lr-btn" class="middle-button" title="BOM left, drawings right"></button>
+                <button id="tb-btn" class="right-most-button" title="BOM top, drawings bot"></button>
+            </div>
+        </div>
+        <div id="fileinfodiv" style="overflow: auto;">
+            <table class="fileinfo">
+                <tbody>
+                    <tr>
+                        <td id="title" class="title" style="width: 70%">
+                            Title
+                        </td>
+                        <td id="revision" class="title" style="width: 30%">
+                            Revision
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="company">
+                            Eagle version
+                        </td>
+                        <td id="filedate">
+                            Date
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div id="bot" class="split" style="height: calc(100% - 80px)">
+        <div id="datadiv" class="split">
+            <div id="bomdiv" class="split split-horizontal">
+                <div style="width: 100%">
+                    <input id="filter" class="searchbox filter hideonprint" type="text" placeholder="Filter">
+                    <button id="clearSearch" class="btn-clear" type="button" title="Clear Filter" >X</button>
+                </div>
+                <table class="bom">
+                    <thead id="bomhead">
+                    </thead>
+                    <tbody id="bombody">
+                    </tbody>
+                </table>
+            </div>
+            <div id="canvasdiv" class="split split-horizontal">
+                <div id="frontcanvas" class="split" style="overflow: hidden">
+                    <div style="position: relative; width: 100%; height: 100%;">
+                        <canvas id="F_bg" style="position: absolute; left: 0; top: 0; z-index: 0;"></canvas>
+                        <canvas id="F_slk" style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>
+                        <canvas id="F_hl" style="position: absolute; left: 0; top: 0; z-index: 2;"></canvas>
+                    </div>
+                </div>
+                <div id="backcanvas" class="split" style="overflow: hidden">
+                    <div style="position: relative; width: 100%; height: 100%;">
+                        <!-- Think of the following as layers. Theres the bakground, then the silk aplied on top, then the highlights on top of that -->
+                        <canvas id="B_bg" style="position: absolute; left: 0; top: 0; z-index: 0;"></canvas>
+                        <canvas id="B_slk" style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>
+                        <canvas id="B_hl" style="position: absolute; left: 0; top: 0; z-index: 2;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="layerdiv" class="split">
+            <table class="bom">
+                <thead id="layerhead">
+                </thead>
+                <tbody id="layerbody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+
+<script src="index.js"></script>
+
+
+</html>
